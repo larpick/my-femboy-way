@@ -1,38 +1,219 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>My Femboy Way</title>
-  <style>
-    body {
-      font-family: 'Segoe UI', sans-serif;
-      max-width: 700px;
-      margin: 40px auto;
-      padding: 0 20px;
-      background: #fdf2f8;
-      color: #4a2545;
-      line-height: 1.6;
-    }
-    h1 { color: #d946a8; }
-    .post {
-      background: white;
-      border-radius: 12px;
-      padding: 20px;
-      margin: 20px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-    }
-    .date { color: #a78bca; font-size: 0.9em; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Femboy Way — Журнал Приключений</title>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Rubik:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0f0a1a;
+    --panel: #1b1230;
+    --panel2: #241a40;
+    --pink: #ff6ec7;
+    --violet: #b388ff;
+    --gold: #ffd54f;
+    --green: #69f0ae;
+    --text: #e8dff5;
+    --dim: #9d8fc0;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: 'Rubik', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(255,110,199,0.12), transparent 40%),
+      radial-gradient(circle at 80% 90%, rgba(179,136,255,0.12), transparent 40%);
+    min-height: 100vh;
+  }
+  .wrap { max-width: 800px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  /* ===== ШАПКА ===== */
+  header { text-align: center; padding: 30px 0 20px; }
+  header h1 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(16px, 4vw, 28px);
+    color: var(--pink);
+    text-shadow: 0 0 20px rgba(255,110,199,0.6);
+    line-height: 1.6;
+  }
+  header p { color: var(--dim); margin-top: 12px; font-size: 15px; }
+
+  /* ===== КАРТОЧКА ПЕРСОНАЖА ===== */
+  .char-card {
+    background: var(--panel);
+    border: 2px solid var(--violet);
+    border-radius: 12px;
+    padding: 20px;
+    margin: 24px 0;
+    box-shadow: 0 0 24px rgba(179,136,255,0.15);
+  }
+  .char-top { display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .avatar {
+    width: 72px; height: 72px; border-radius: 12px;
+    background: linear-gradient(135deg, var(--pink), var(--violet));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 36px;
+    border: 2px solid var(--gold);
+  }
+  .char-info { flex: 1; min-width: 200px; }
+  .char-name { font-size: 20px; font-weight: 600; }
+  .char-class { color: var(--dim); font-size: 13px; margin-top: 2px; }
+  .level-badge {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px;
+    color: var(--gold);
+    background: rgba(255,213,79,0.1);
+    border: 1px solid var(--gold);
+    padding: 10px 14px;
+    border-radius: 8px;
+    white-space: nowrap;
+  }
+  .xp-bar-wrap { margin-top: 16px; }
+  .xp-label { display: flex; justify-content: space-between; font-size: 12px; color: var(--dim); margin-bottom: 6px; }
+  .xp-bar {
+    height: 18px; background: #0a0616; border-radius: 9px;
+    border: 1px solid var(--violet); overflow: hidden;
+  }
+  .xp-fill {
+    height: 100%; width: 35%;
+    background: linear-gradient(90deg, var(--violet), var(--pink));
+    box-shadow: 0 0 12px rgba(255,110,199,0.7);
+    transition: width 0.8s ease;
+  }
+
+  /* ===== СТАТЫ ===== */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 24px 0; }
+  .stat {
+    background: var(--panel);
+    border: 1px solid var(--panel2);
+    border-radius: 10px; padding: 14px;
+  }
+  .stat-name { font-size: 13px; color: var(--dim); margin-bottom: 8px; }
+  .stat-bar { height: 10px; background: #0a0616; border-radius: 5px; overflow: hidden; }
+  .stat-fill { height: 100%; border-radius: 5px; }
+  .stat-val { font-size: 12px; margin-top: 6px; color: var(--text); }
+
+  /* ===== КВЕСТЫ ===== */
+  .quests {
+    background: var(--panel);
+    border: 1px solid var(--panel2);
+    border-radius: 12px; padding: 20px; margin: 24px 0;
+  }
+  .quests h2, .journal h2 {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 14px; color: var(--violet);
+    margin-bottom: 14px;
+  }
+  .quest { display: flex; align-items: center; gap: 10px; padding: 8px 0; border-bottom: 1px dashed #2e2350; font-size: 15px; }
+  .quest:last-child { border-bottom: none; }
+  .quest.done { color: var(--dim); text-decoration: line-through; }
+  .quest .xp { margin-left: auto; color: var(--gold); font-size: 13px; white-space: nowrap; }
+
+  /* ===== ЖУРНАЛ ===== */
+  .entry {
+    background: var(--panel);
+    border-left: 4px solid var(--pink);
+    border-radius: 0 12px 12px 0;
+    padding: 18px 20px; margin: 16px 0;
+  }
+  .entry-head { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
+  .entry-date { font-family: 'Press Start 2P', monospace; font-size: 11px; color: var(--pink); }
+  .entry-xp {
+    font-size: 12px; color: var(--gold);
+    background: rgba(255,213,79,0.1); border: 1px solid var(--gold);
+    padding: 3px 10px; border-radius: 20px;
+  }
+  .entry h3 { font-size: 18px; margin-bottom: 8px; }
+  .entry p { color: var(--text); line-height: 1.6; font-size: 15px; }
+
+  footer { text-align: center; color: var(--dim); font-size: 13px; margin-top: 40px; }
+  footer .heart { color: var(--pink); }
+</style>
+<base target="_blank">
 </head>
 <body>
-  <h1>🌸 My Femboy Way</h1>
-  <p>Мой личный путь становления фембоем. Здесь я делюсь мыслями, опытом и прогрессом.</p>
+<div class="wrap">
 
-  <div class="post">
-    <div class="date">13 сентября 2026</div>
-    <h2>Пост №1: Начало пути</h2>
-    <p>Здесь будет текст твоего первого поста...</p>
+  <header>
+    <h1>⚔ MY FEMBOY WAY ⚔</h1>
+    <p>журнал приключений · день за днём к новому себе</p>
+  </header>
+
+  <!-- ===== КАРТОЧКА ПЕРСОНАЖА ===== -->
+  <div class="char-card">
+    <div class="char-top">
+      <div class="avatar">🌸</div>
+      <div class="char-info">
+        <div class="char-name">Твоё имя / ник</div>
+        <div class="char-class">класс: Femboy · ранг: Новичок</div>
+      </div>
+      <div class="level-badge">LVL 1</div>
+    </div>
+    <div class="xp-bar-wrap">
+      <div class="xp-label"><span>ОПЫТ</span><span>35 / 100 XP</span></div>
+      <div class="xp-bar"><div class="xp-fill" style="width:35%"></div></div>
+    </div>
   </div>
+
+  <!-- ===== ХАРАКТЕРИСТИКИ ===== -->
+  <div class="stats">
+    <div class="stat">
+      <div class="stat-name">💗 Харизма</div>
+      <div class="stat-bar"><div class="stat-fill" style="width:20%;background:var(--pink)"></div></div>
+      <div class="stat-val">2 / 10</div>
+    </div>
+    <div class="stat">
+      <div class="stat-name">🌸 Стиль</div>
+      <div class="stat-bar"><div class="stat-fill" style="width:30%;background:var(--violet)"></div></div>
+      <div class="stat-val">3 / 10</div>
+    </div>
+    <div class="stat">
+      <div class="stat-name">✨ Грация</div>
+      <div class="stat-bar"><div class="stat-fill" style="width:10%;background:var(--gold)"></div></div>
+      <div class="stat-val">1 / 10</div>
+    </div>
+    <div class="stat">
+      <div class="stat-name">🛡️ Уверенность</div>
+      <div class="stat-bar"><div class="stat-fill" style="width:25%;background:var(--green)"></div></div>
+      <div class="stat-val">2.5 / 10</div>
+    </div>
+  </div>
+
+  <!-- ===== АКТИВНЫЕ КВЕСТЫ ===== -->
+  <div class="quests">
+    <h2>📜 АКТИВНЫЕ КВЕСТЫ</h2>
+    <div class="quest"><input type="checkbox"> Подобрать первый аутфит <span class="xp">+20 XP</span></div>
+    <div class="quest"><input type="checkbox"> Уход за кожей: начать базовый рутин <span class="xp">+15 XP</span></div>
+    <div class="quest"><input type="checkbox"> Сделать первую фотографию <span class="xp">+25 XP</span></div>
+    <div class="quest done"><input type="checkbox" checked> Создать этот блог <span class="xp">+35 XP</span></div>
+  </div>
+
+  <!-- ===== ЖУРНАЛ ===== -->
+  <div class="journal">
+    <h2>📖 ЖУРНАЛ ПРИКЛЮЧЕНИЙ</h2>
+
+    <!-- НОВЫЙ ПОСТ ВСТАВЛЯЙ СЮДА, В САМЫЙ ВЕРХ -->
+    <div class="entry">
+      <div class="entry-head">
+        <span class="entry-date">ДЕНЬ 1 · 13.09.2026</span>
+        <span class="entry-xp">+35 XP</span>
+      </div>
+      <h3>Создание свитка</h3>
+      <p>
+        Начало пути. Сегодня я создал этот журнал — мой личный квестлог.
+        Цель: каждый день делать маленький шаг и записывать прогресс.
+        Первый квест выполнен, опыт получен. Дальше — больше.
+      </p>
+    </div>
+
+  </div>
+
+  <footer>
+    <span class="heart">♥</span> сохранено в журнале · my femboy way <span class="heart">♥</span>
+  </footer>
+
+</div>
 </body>
 </html>
